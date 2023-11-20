@@ -160,12 +160,12 @@ class TreeplexDomain:
     # In order to get strong convexity modulus 1 we scale by M.
     def _weights(self, infoset_weights=False, weight_scalar=1.0):
         if infoset_weights == 'kroer15':
-            seq_weights = np.full(self._dimension, 0, np.int)
+            seq_weights = np.full(self._dimension, 0, np.int64)
         elif infoset_weights == 'all_one':
-            return np.ones(len(self._begin), np.float)
+            return np.ones(len(self._begin), np.float64)
         else:
-            seq_weights = np.full(self._dimension, 0, np.int)
-        weights = np.zeros(len(self._begin), np.float)
+            seq_weights = np.full(self._dimension, 0, np.int64)
+        weights = np.zeros(len(self._begin), np.float64)
         l1_max = np.zeros(self._dimension)
         depth = np.zeros(self._dimension)
         l1_overall = 0
