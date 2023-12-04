@@ -8,9 +8,13 @@ class MatrixGame:
 
     i.e., x, the first player, is the minimizer
     """
-    def __init__(self, name, A):
+    def __init__(self, name, A, B=None):
         self._name    = name
-        self._A       = A
+        self._A       = -1*A
+        if B:
+            self._B = B
+        else:
+            self._B = A
         self._domains = (SimplexDomain(A.shape[0]), SimplexDomain(A.shape[1]))
 
     def domain(self, player):
@@ -26,11 +30,11 @@ class MatrixGame:
         return np.dot(x, self.utility_for(0, y))
 
     def utility_for(self, player, opponent_strategy):
-        if player == 0:
-            return -np.dot(self._A, opponent_strategy)
+        if player == 0: # player 0 = matrix A
+            return np.dot(self._A, opponent_strategy)
 
-        assert player == 1
-        return np.dot(self._A.T, opponent_strategy)
+        assert player == 1 #player 1 = matrix B
+        return np.dot(self._B.T, opponent_strategy)
 
     def __str__(self):
         return 'MatrixGame(%s, %dx%d)' % (self._name, self._A.shape[0], self._A.shape[1])
