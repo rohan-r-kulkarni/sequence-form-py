@@ -12,7 +12,7 @@ from extensive_form_game import libef_reader # this line can be commented in in 
 from poker import kuhn
 from poker import leduc
 from poker import nlhe_river
-from poker import judgment
+from judgment import single_shot_judgment
 from matrix_game import game as matrix_game
 from matrix_game import regret as matrix_regret
 from eqm import chambolle_pock as cp
@@ -196,6 +196,8 @@ elif args.game == 'leduc':
         num_ranks=args.num_ranks,
         prox_infoset_weights=args.prox_infoset_weights,
         prox_scalar=args.prox_scalar)
+elif args.game == 'single_shot_judgment':
+    game = single_shot_judgment.init_matrix()
 elif '.blsp' in args.game:
     game = blsp_reader.make_efg_from_file(
         args.game,
