@@ -260,6 +260,9 @@ for alg_idx, alg in enumerate(algs_to_run):
         total_time += time.time() - t0
         eps = opt.epsilon()
         profile_val = opt.profile_value()
+        iter_str = str(print_seq[i])
+        while len(iter_str) < 8:
+            iter_str = "0" + iter_str
         if to_csv:
             print('{iters},{gradients},{eps},{profile_val},{algorithm},{time}'.format(
                 iters=print_seq[i],
@@ -289,7 +292,7 @@ for alg_idx, alg in enumerate(algs_to_run):
                 ))
         else:
             print(print_seq[i], opt.gradient_computations(), eps, profile_val)
-        print(t, opt.gradient_computations(), eps, total_time, file=gnuplot_out)
+        print(iter_str, opt.gradient_computations(), eps, total_time, file=gnuplot_out)
         if eps < eps_threshold:
             break
 

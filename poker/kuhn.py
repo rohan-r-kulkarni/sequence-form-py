@@ -23,9 +23,9 @@ def init_matrix(num_ranks=3):
 
     A = np.empty((M, N))
     for i in range(M):
-        x = [i / 3**k % 3 for k in range(num_ranks)]
+        x = np.array([i / 3**k % 3 for k in range(num_ranks)]).astype(int)
         for j in range(N):
-            y = [j / 4**k % 4 for k in range(num_ranks)]
+            y = np.array([j / 4**k % 4 for k in range(num_ranks)]).astype(int)
 
             t = 0
             for c1 in range(num_ranks):
