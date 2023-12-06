@@ -43,8 +43,11 @@ class SlyAgent(Agent):
     A sly agent that saves their large cards for later in the game, bidding zero and playing the minimum card initially.
     """
     def bid(self, hand):
-        # Bid zero initially
-        return 0
+        # Bid as if agent will win later rounds if it has high cards
+        high_cards = sum(1 for card in hand if card in ['J', 'Q', 'K', 'A'])
+        
+        # agent will play to win the later rounds, but if it doesn't have high cards, it will bid less
+        return min(int(len(hand) / 2), high_cards)
 
     def play_card(self, hand, round_number):
         # Save larger cards for later, play the minimum card
