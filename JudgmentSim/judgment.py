@@ -93,16 +93,3 @@ class JudgementGameRankOnly:
         else:
             return {0: j - i, 1: i - j}
 
-# We'll reuse the RandomAgent class for simplicity.
-# Let's create a JudgementGameRankOnly instance with 5 cards per hand and simulate a game.
-
-# Creating the agents
-agent1 = RandomAgent()
-agent2 = RandomAgent()
-
-# Initializing the game with 5 cards per hand
-game = JudgementGameRankOnly(agent1, agent2, num_cards_per_hand=5)
-
-# Running the game simulation with verbose output
-game_score = game.play_game()
-game_score
