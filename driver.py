@@ -67,6 +67,19 @@ parser.add_argument(
     default=3,
     help='Number of ranks in the deck. Only works for Leduc.')
 
+parser.add_argument(
+    '-ds',
+    '--deck-size',
+    type=int,
+    default=10,
+    help='Number of ranks in the deck. Only works for Judgment.')
+parser.add_argument(
+    '-k',
+    '--k-hand_size',
+    type=int,
+    default=3,
+    help='Number of cards in hand dealt. Only works for Judgment.')
+
 # Algorithm params
 parser.add_argument('-a', '--algorithm',
                     default=','.join(algs.keys()), dest='alg',
@@ -197,7 +210,7 @@ elif args.game == 'leduc':
         prox_infoset_weights=args.prox_infoset_weights,
         prox_scalar=args.prox_scalar)
 elif args.game == 'single_shot_judgment':
-    game = single_shot_judgment.init_matrix()
+    game = single_shot_judgment.init_matrix(args.deck_size, args.k_hand_size)
 elif '.blsp' in args.game:
     game = blsp_reader.make_efg_from_file(
         args.game,
