@@ -2,8 +2,9 @@ import numpy as np
 from scipy.sparse import lil_matrix
 from extensive_form_game import extensive_form_game as efg
 from scipy.stats import norm
+import math
 
-def init_efg(num_rounds=3, num_ranks=10, num_copy=1, k=3, prox_infoset_weights=False, prox_scalar=-1):
+def init_efg(num_rounds=3, num_ranks=10, num_copy=1, prox_infoset_weights=False, prox_scalar=-1):
 
     assert num_rounds >= 1
     num_cards = num_ranks * num_copy
@@ -61,12 +62,7 @@ def init_efg(num_rounds=3, num_ranks=10, num_copy=1, k=3, prox_infoset_weights=F
 
     def _build_play(b0,b1,rnd, player, num_tricks_taken, previous_seq):
         opponent = 1 - player
-        if player == 0 and rnd == 1: #  first action
-            num_actions = num_rounds + 1
-        else: num_actions = num_cards - (2*(rnd-1))
-
-        info_set = len(begin[player])
-        num_actions = num_ranks
+        num_actions = num_rounds - num_tricks_taken
         
         info_set = len(begin[player])
         for card_played in range(num_actions):
@@ -74,12 +70,8 @@ def init_efg(num_rounds=3, num_ranks=10, num_copy=1, k=3, prox_infoset_weights=F
             begin[player].append(next_s[player])
             next_s[player] += 1
             end[player].append(next_s[player])
-            if player == 0 and rnd == 1:
-                for opp_bet in range(num_rounds + 1):
-                    reach.append((player, info_set + card_played, previous_seq[opponent][opp_bet], _p_chance(2)))
-            else:
-                for opponent_card in range(num_actions):
-                    reach.append((player, info_set + card_played, previous_seq[opponent][opponent_card], _p_chance((rnd-1)*2)))
+            for opponent_card in range(num_actions):
+                reach.append((player, info_set + card_played, previous_seq[opponent][opponent_card], _p_chance((rnd-1)*2)))
 
         def _pn(idx):
             t = [begin[player][info_set + card_played] + idx for card_played in range(num_actions)]
@@ -111,17 +103,19 @@ def init_efg(num_rounds=3, num_ranks=10, num_copy=1, k=3, prox_infoset_weights=F
             y = abs(b1-p1_tricks)
             return y-x
 
-        for i in range(num_ranks):
-            for j in range(num_ranks):
+        for i in range(len(previous_seq[0])):
+            for j in range(len(previous_seq[1])):
                 payoff.append((previous_seq[0][i], previous_seq[1][j],
                                _p_chance(num_rounds) * _value(i, j, num_tricks_taken, num_rounds - num_tricks_taken)))
                 
-    previous_seg = ([0] * num_ranks, [0] * num_ranks)
+    previous_seg = ([0] * math.comb(num_cards,num_rounds), [0] * math.comb(num_cards, num_rounds))
     _build_bid(0, num_rounds, previous_seg)
-    payoff_matrix = lil_matrix(next_s[0], next_s[1])
+    payoff_matrix = lil_matrix((next_s[0], next_s[1]))
+    print(next_s)
     for i,j,payoff_value in payoff:
         payoff_matrix[i,j] += payoff_value
-    reach_matrix = (lil_matrix(len(begin[0]), next_s[1]), lil_matrix(len(begin[1]), next_s[0]))
+    reach_matrix = (lil_matrix((len(begin[0]), next_s[1])), lil_matrix(
+        (len(begin[1]), next_s[0])))
     for player, infoset, opponent_seq, prob in reach:
         reach_matrix[player][infoset, opponent_seq] += prob
     
