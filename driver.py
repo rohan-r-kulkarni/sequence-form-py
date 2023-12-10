@@ -79,6 +79,12 @@ parser.add_argument(
     type=int,
     default=3,
     help='Number of cards in hand dealt. Only works for Judgment.')
+parser.add_argument(
+    '-o',
+    '--ordered',
+    type=bool,
+    default=True,
+    help='Ordered play or not. Only works for Judgment.')
 
 # Algorithm params
 parser.add_argument('-a', '--algorithm',
@@ -210,7 +216,7 @@ elif args.game == 'leduc':
         prox_infoset_weights=args.prox_infoset_weights,
         prox_scalar=args.prox_scalar)
 elif args.game == 'single_shot_judgment':
-    game = single_shot_judgment.init_matrix(args.deck_size, args.k_hand_size)
+    game = single_shot_judgment.init_matrix(args.deck_size, args.k_hand_size, args.ordered)
 elif '.blsp' in args.game:
     game = blsp_reader.make_efg_from_file(
         args.game,
