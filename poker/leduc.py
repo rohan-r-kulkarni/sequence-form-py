@@ -96,6 +96,7 @@ def init_efg(num_ranks=3,
             for j in range(num_ranks):
                 reach.append((actor, info_set + i, previous_seq[opponent][j],
                               _p_chance(rnd, board, i, j)))
+                #print(reach, "/n/n/n")
 
         def _pn(idx):
             t = [begin[actor][info_set + i] + idx for i in range(num_ranks)]
@@ -145,6 +146,8 @@ def init_efg(num_ranks=3,
         (len(begin[1]), next_s[0])))
     for player, infoset, opponent_seq, prob in reach:
         reach_matrix[player][infoset, opponent_seq] += prob
+
+    print(reach_matrix)
 
     if all_negative:
         if integer:
