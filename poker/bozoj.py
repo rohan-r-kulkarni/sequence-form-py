@@ -26,6 +26,8 @@ def init_efg(num_rounds=3, num_ranks=10, num_copy=1, prox_infoset_weights=False,
         opponent = 1 - player
         num_actions = num_rounds + 1
 
+       # print(begin)
+
         def _p_chance_bid(i, j):
             mean_bid = num_rounds / 2  # Center the distribution around the middle bid
             std_dev_bid = num_rounds / 3  # Make the distribution wide enough to cover all bids
@@ -63,6 +65,8 @@ def init_efg(num_rounds=3, num_ranks=10, num_copy=1, prox_infoset_weights=False,
     def _build_play(b0,b1,rnd, player, num_tricks_taken, previous_seq):
         opponent = 1 - player
         num_actions = num_rounds - num_tricks_taken
+
+        # print(begin)
         
         info_set = len(begin[player])
         for card_played in range(num_actions):
