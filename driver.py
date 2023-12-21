@@ -44,7 +44,7 @@ algs = {
         alternate=True, linear_averaging=True, name='CBA+'),
     'RM+_LINEAR': lambda args: eqm_regret.regret_minimization_initializer(
         matrix_regret.regret_matching_plus_initializer(),
-        alternate=False, linear_averaging=True, name='CFR+'),
+        alternate=False, linear_averaging=True, name='RM+_LINEAR'),
     'EGT_WARM': lambda args: egt.egt_warm_start_initializer(
         alg=eqm_regret.regret_minimization_initializer(
             matrix_regret.regret_matching_plus_initializer(),
@@ -71,7 +71,7 @@ parser.add_argument(
     '-ds',
     '--deck-size',
     type=int,
-    default=10,
+    default=6,
     help='Number of ranks in the deck. Only works for Judgment.')
 parser.add_argument(
     '-k',
@@ -79,12 +79,6 @@ parser.add_argument(
     type=int,
     default=3,
     help='Number of cards in hand dealt. Only works for Judgment.')
-parser.add_argument(
-    '-o',
-    '--ordered',
-    type=bool,
-    default=True,
-    help='Ordered play or not. Only works for Judgment.')
 
 # Algorithm params
 parser.add_argument('-a', '--algorithm',
@@ -216,7 +210,7 @@ elif args.game == 'leduc':
         prox_infoset_weights=args.prox_infoset_weights,
         prox_scalar=args.prox_scalar)
 elif args.game == 'single_shot_judgment':
-    game = single_shot_judgment.init_matrix(args.deck_size, args.k_hand_size, args.ordered)
+    game = single_shot_judgment.init_matrix(args.deck_size, args.k_hand_size)
 elif '.blsp' in args.game:
     game = blsp_reader.make_efg_from_file(
         args.game,
