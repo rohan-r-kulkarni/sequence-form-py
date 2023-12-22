@@ -1,9 +1,12 @@
 import numpy as np
+import random
 from judgmenttree import Node
 
 def UCT(node):
-    # UCT formula
-    return node.value[0] / node.visit_count + np.sqrt(2 * np.log(node.parent.visit_count) / node.visit_count)
+    if node.visit_count == 0:
+        return float('inf')  # return a high value to favor unexplored nodes
+    else:
+        return node.value[0] / node.visit_count + np.sqrt(2 * np.log(node.parent.visit_count) / node.visit_count)
 
 def select(node):
     # Select a child node
@@ -36,7 +39,7 @@ def simulate(node):
     else:
         raise ValueError("Simulation ended on a non-terminal node.")
 
-def MCTS(root, iterations):
+def MCTS(root, iterations, player):
     for _ in range(iterations):
         # Selection
         node = root
@@ -59,4 +62,39 @@ def MCTS(root, iterations):
             node.backpropagate(utility)
     
     # Return the best child of the root
-    return max(root.children, key=lambda node: node.value[0])
+    return max(root.children, key=lambda node: node.value[player])
+
+def MCTS_UCT(root, iterations, player):
+    for _ in range(iterations):
+        # Selection
+        node = select(root)
+
+        # Expansion
+        if not node.is_terminal():
+            node.generate_children()
+
+        # Simulation
+        node = np.random.choice(node.children) if node.children else node
+        while not node.is_terminal():
+            node.generate_children()
+            node = np.random.choice(node.children) if node.children else node
+
+        # Calculate utility and Backpropagation
+        if node.is_terminal():
+            utility = node.calculate_utility()
+            node.backpropagate(utility)
+    
+    # Return the best child of the root
+    return max(root.children, key=lambda node: node.value[player])
+
+# deck = np.arange(1, 11)
+# deck = np.append(deck, deck)
+# random.shuffle(deck)
+# handSize = 5
+# MCTSHand = deck[:handSize]
+# deck = deck[handSize:]
+
+# firstPlayerHasBetNode = Node(deck, MCTSHand, bets=[random.randint(0, handSize), None])
+
+# bestChild = MCTS(firstPlayerHasBetNode, 1000, 1)
+# print(bestChild.bets, bestChild.player1_hand, bestChild.deck, bestChild.value, bestChild.visit_count)

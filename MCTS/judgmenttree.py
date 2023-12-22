@@ -5,7 +5,7 @@ class Node:
         self.player1_hand = player1_hand
         self.deck = deck  # Remaining cards in the deck, excluding Player 1's hand
         self.parent = parent
-        self.hand_size = len(player1_hand)  # The size of Player 1's hand
+        self.hand_size = min(len(player1_hand), len(deck))  # The size of Player 1's hand
         self.deck_size = len(deck) + self.hand_size  # Total number of cards in the game
         self.bets = bets if bets is not None else [None, None]
         self.tricks_won = tricks_won if tricks_won is not None else [0, 0]
@@ -17,7 +17,7 @@ class Node:
 
     def is_terminal(self):
         # Check if the node is a terminal node (all cards have been played)
-        return len(self.player1_hand) == 0 and not self.current_trick
+        return (len(self.player1_hand) == 0 or len(self.deck) == 0) and not self.current_trick
 
     def calculate_utility(self):
         # Calculate utility at terminal nodes
@@ -137,3 +137,10 @@ def print_tree(node, indent="", last='updown'):
         print_tree(child, indent, _last)
 
 
+# deck = np.arange(1, 6)
+# player1_hand = deck[:2]
+# deck = deck[2:] # Remove Player 1's hand from the deck
+# root = Node(deck, player1_hand)
+
+# expanded = build_tree(root)
+# print_tree(expanded)
