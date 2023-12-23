@@ -11,10 +11,7 @@ from extensive_form_game import blsp_reader
 from extensive_form_game import libef_reader # this line can be commented in in order to get the libgg reader
 from poker import kuhn
 from poker import leduc
-from poker import leduc_mod
 from poker import nlhe_river
-#from poker import judgment
-from poker import bozoj
 from matrix_game import game as matrix_game
 from matrix_game import regret as matrix_regret
 from eqm import chambolle_pock as cp
@@ -181,10 +178,6 @@ if args.game == 'river':
     game = nlhe_river.init_efg(
         prox_infoset_weights=args.prox_infoset_weights,
         prox_scalar=args.prox_scalar)
-elif args.game == 'bozoj':
-    game = bozoj.init_efg()
-elif args.game == 'judgment':
-    game = judgment.init_efg()
 elif args.game == 'river_big':
     game = nlhe_river.init_efg_big(
         prox_infoset_weights=args.prox_infoset_weights,
@@ -193,11 +186,6 @@ elif args.game == 'kuhn_matrix':
     game = kuhn.init_matrix()
 elif args.game == 'kuhn':
     game = kuhn.init_efg(
-        prox_infoset_weights=args.prox_infoset_weights,
-        prox_scalar=args.prox_scalar)
-elif args.game == 'leduc_mod':
-    game = leduc_mod.init_efg(
-        num_ranks=args.num_ranks,
         prox_infoset_weights=args.prox_infoset_weights,
         prox_scalar=args.prox_scalar)
 elif args.game == 'leduc':
